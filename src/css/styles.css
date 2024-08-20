@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Hubballi&display=swap');
+@import url("https://enma1.netlify.app/packages/index.css");
+
+#editor {
+    width: 800px;
+    height: 900px;
+    border: 1px solid #ddd;
+}

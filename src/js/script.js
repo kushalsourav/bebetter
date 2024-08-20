@@ -1,28 +1,65 @@
 
 import { func, GroupButton , FileWindow} from "./component.js";
 import {instance} from "./callback.js";
+import { WelcomePage } from "./components/WelcomePage.js";
+import { JoinButton } from "./components/JoinButton.js";
+import { CreateButton } from "./components/CreateButton.js";
+import { ActiveDataDisplay } from "./components/ActiveDataDisplay.js";
 
 
 let data = ''
 const vscode = acquireVsCodeApi();
 
 
+let mainPage = document.getElementById('main')
+const welcomepage = new WelcomePage()
+mainPage.appendChild(welcomepage)
+welcomepage.setAttribute('is', 'welcome-page')
 
-const createButton = document.getElementById('create_group');
+const createButton = new CreateButton()
+createButton.setAttribute('is', 'create-button')
+createButton.setAttribute('class', 'btn btn-primary')
+createButton.textContent = "create"
+welcomepage.appendChild(createButton)
 
-const content = new FileWindow();
-content.setAttribute('is', 'file-window')
-content.style.color = '#ffffff'
-document.body.append(content)
+const joinButton = new JoinButton()
+joinButton.setAttribute('is', 'join-button')
+joinButton.setAttribute('class', 'btn btn-secondary')
+joinButton.textContent = "join"
+welcomepage.appendChild(joinButton)
+
+//const createButton = document.getElementById('create_group');
+
+const activeDataDisplay = new ActiveDataDisplay();
+activeDataDisplay.style.background = "#333"
+activeDataDisplay.style.color = "#fff"
+activeDataDisplay.style.padding = "40px"
+
+joinButton.addEventListener("click" , (e) => {
+e.preventDefault();
+mainPage.removeChild(welcomepage)
+mainPage.appendChild(activeDataDisplay)
+
+
+})
+ 
+
 
 try{
 	window.addEventListener('message', (e) => {
 		console.log(e, e.data)
-		content.textContent = `${e.data.data}`
+		activeDataDisplay.textContent =  e.data.data
 	})
 }catch (err) {
 	console.log(err, "is this causing error")
 }
+
+
+// const content = new FileWindow();
+// content.setAttribute('is', 'file-window')
+// content.style.color = '#ffffff'
+// document.body.append(content)
+
 
 
 
@@ -46,13 +83,13 @@ document.body.appendChild(button)
 
 // content.innerText = `${data}`
 
-createButton.textContent = "gg"
-createButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("working")
-    createGroup()
-	func()
-})
+// createButton.textContent = "gg"
+// createButton.addEventListener("click", (e) => {
+//     e.preventDefault();
+//     console.log("working")
+//     createGroup()
+// 	func()
+// })
 
 
 const createGroup = async () => {

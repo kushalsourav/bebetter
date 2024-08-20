@@ -38,13 +38,24 @@ function activate(context) {
 			enableScripts: true,
 			retainContextWhenHidden: true,
 		})
+
+		const cssUri = vscode.Uri.file(
+            path.join(context.extensionPath, 'src', 'css', 'styles.css')
+        );
+        const cssPath = webView.webview.asWebviewUri(cssUri);
+
 		const scriptUri = vscode.Uri.file(
 			path.join(context.extensionPath, 'src', 'js', 'script.js')
 		)
 		const scriptPath = webView.webview.asWebviewUri(scriptUri)
 
 		const onDiskHtmlPath = path.join(context.extensionPath, 'src', 'html', 'index.html')
-        const htmlFile = fs.readFileSync(onDiskHtmlPath, 'utf-8').replace(`<script type="module" src="../js/script.js" ></script>`, `<script type="module" src="${scriptPath}" ></script>`)
+
+        let htmlFile = fs.readFileSync(onDiskHtmlPath, 'utf-8')
+		htmlFile = htmlFile
+		.replace(`<script type="module" src="../js/script.js" ></script>`, `<script type="module" src="${scriptPath}" ></script>`)
+            .replace('<link rel="stylesheet" href="../css/styles.css">', `<link rel="stylesheet" href="${cssPath}">`);
+
 		webView.webview.html = htmlFile;
 		webView.onDidChangeViewState((e) => {
 			console.log("eee", e)
@@ -168,7 +179,7 @@ function activate(context) {
 
 		// for displaying the all files and streaming them is also mandatory, for that use textdocuments and ...spreadparams and map over it 
 
-
+       
 
 
 
